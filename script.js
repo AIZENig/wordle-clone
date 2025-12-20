@@ -15,11 +15,11 @@ const MAX_ROWS = 6;
 
 // Allowed words
 const ANSWERS = [
-  "APPLE","GRAPE","BRICK","PLANE","CHAIR","TABLE","WATER","MONEY",
-  "HOUSE","LIGHT","SMILE","HEART","BREAD","CANDY","CLOCK","EARTH",
-  "FRUIT","GREEN","HAPPY","JUICE","KNIFE","LAUGH","MUSIC","NURSE",
-  "OCEAN","PIZZA","QUEEN","RIVER","SUGAR","TIGER","UNITY","VALUE",
-  "WHEEL","YEAST","ZEBRA"
+  "APPLE", "GRAPE", "BRICK", "PLANE", "CHAIR", "TABLE", "WATER", "MONEY",
+  "HOUSE", "LIGHT", "SMILE", "HEART", "BREAD", "CANDY", "CLOCK", "EARTH",
+  "FRUIT", "GREEN", "HAPPY", "JUICE", "KNIFE", "LAUGH", "MUSIC", "NURSE",
+  "OCEAN", "PIZZA", "QUEEN", "RIVER", "SUGAR", "TIGER", "UNITY", "VALUE",
+  "WHEEL", "YEAST", "ZEBRA"
 ];
 
 // =====================
@@ -70,13 +70,7 @@ function submitGuess() {
     return;
   }
 
-  // 2. Dictionary check
-  if (!ANSWERS.includes(guess)) {
-    showMessage("Not in word list!");
-    return;
-  }
-
-  // 3. At least one letter must be in secret word
+  // 2. At least one letter must be in secret word
   let hasCommonLetter = false;
   for (const ch of guess) {
     if (secretWord.includes(ch)) {
@@ -89,10 +83,10 @@ function submitGuess() {
     return;
   }
 
-  // 4. Render guess
+  // 3. Render guess
   renderGuess(guess);
 
-  // 5. Win check
+  // 4. Win check
   if (guess === secretWord) {
     endGame(true);
     return;
@@ -100,12 +94,12 @@ function submitGuess() {
 
   currentRow++;
 
-  // 6. Optional hint
+  // 5. Optional hint
   if (currentRow === MAX_ROWS - 2 && !hintGiven) {
     giveHint();
   }
 
-  // 7. Lose check
+  // 6. Lose check
   if (currentRow === MAX_ROWS) {
     endGame(false);
   }
