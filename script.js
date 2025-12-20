@@ -13,13 +13,15 @@ const restartBtn = document.getElementById("restartBtn");
 const WORD_LENGTH = 5;
 const MAX_ROWS = 6;
 
-// Answer pool
+// ONLY for choosing the secret word
 const ANSWERS = [
-  "APPLE","GRAPE","BRICK","PLANE","CHAIR","TABLE","WATER","MONEY",
-  "HOUSE","LIGHT","SMILE","HEART","BREAD","CANDY","CLOCK","EARTH",
-  "FRUIT","GREEN","HAPPY","JUICE","KNIFE","LAUGH","MUSIC","NURSE",
-  "OCEAN","PIZZA","QUEEN","RIVER","SUGAR","TIGER","UNITY","VALUE",
-  "WHEEL","YEAST","ZEBRA"
+  "APPLE", "GRAPE", "BRICK", "PLANE", "CHAIR",
+  "TABLE", "WATER", "MONEY", "HOUSE", "LIGHT",
+  "SMILE", "HEART", "BREAD", "CANDY", "CLOCK",
+  "EARTH", "FRUIT", "GREEN", "HAPPY", "JUICE",
+  "KNIFE", "LAUGH", "MUSIC", "NURSE", "OCEAN",
+  "PIZZA", "QUEEN", "RIVER", "SUGAR", "TIGER",
+  "UNITY", "VALUE", "WHEEL", "YEAST", "ZEBRA"
 ];
 
 // =====================
@@ -28,7 +30,6 @@ const ANSWERS = [
 let secretWord = "";
 let currentRow = 0;
 let gameOver = false;
-let hintGiven = false;
 
 // =====================
 // INIT
@@ -48,7 +49,6 @@ function startGame() {
   secretWord = randomAnswer();
   currentRow = 0;
   gameOver = false;
-  hintGiven = false;
 
   input.value = "";
   input.disabled = false;
@@ -56,7 +56,8 @@ function startGame() {
   message.textContent = "";
 
   clearGrid();
-  console.log("SECRET:", secretWord); // remove later
+
+  console.log("Secret word:", secretWord); // remove later
 }
 
 function submitGuess() {
@@ -64,8 +65,8 @@ function submitGuess() {
 
   const guess = input.value.trim().toUpperCase();
 
-  // Only rule: exactly 5 letters
-  if (guess.length !== WORD_LENGTH) {
+  // ONLY validation: exactly 5 letters A–Z
+  if (!/^[A-Z]{5}$/.test(guess)) {
     showMessage("Enter exactly 5 letters");
     return;
   }
@@ -79,11 +80,6 @@ function submitGuess() {
 
   currentRow++;
 
-  // Hint when 2 rows left
-  if (currentRow === MAX_ROWS - 2 && !hintGiven) {
-    giveHint();
-  }
-
   if (currentRow === MAX_ROWS) {
     endGame(false);
   }
@@ -92,17 +88,18 @@ function submitGuess() {
 }
 
 // =====================
-// WORDLE LOGIC
+// WORDLE LOGIC (CORRECT)
 // =====================
 function renderGuess(guess) {
   const cells = rows[currentRow].querySelectorAll(".cell");
 
+  // Frequency map of secret word
   const letterCount = {};
   for (const ch of secretWord) {
     letterCount[ch] = (letterCount[ch] || 0) + 1;
   }
 
-  // Pass 1 — GREEN
+  // PASS 1 — GREEN
   for (let i = 0; i < WORD_LENGTH; i++) {
     const letter = guess[i];
     cells[i].textContent = letter;
@@ -113,7 +110,7 @@ function renderGuess(guess) {
     }
   }
 
-  // Pass 2 — YELLOW / GRAY
+  // PASS 2 — YELLOW / GRAY
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (cells[i].classList.contains("correct")) continue;
 
@@ -126,33 +123,6 @@ function renderGuess(guess) {
       cells[i].classList.add("absent");
     }
   }
-}
-
-// =====================
-// HINT SYSTEM
-// =====================
-function giveHint() {
-  hintGiven = true;
-
-  const revealed = new Set();
-
-  for (let r = 0; r < currentRow; r++) {
-    rows[r].querySelectorAll(".cell").forEach((cell, i) => {
-      if (cell.classList.contains("correct")) {
-        revealed.add(i);
-      }
-    });
-  }
-
-  const options = [];
-  for (let i = 0; i < WORD_LENGTH; i++) {
-    if (!revealed.has(i)) options.push(i);
-  }
-
-  if (options.length === 0) return;
-
-  const index = options[Math.floor(Math.random() * options.length)];
-  message.textContent = `Hint: Letter ${index + 1} is "${secretWord[index]}"`;
 }
 
 // =====================
