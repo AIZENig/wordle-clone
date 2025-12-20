@@ -13,13 +13,13 @@ const restartBtn = document.getElementById("restartBtn");
 const WORD_LENGTH = 5;
 const MAX_ROWS = 6;
 
-// Allowed words
+// Answer pool
 const ANSWERS = [
-  "APPLE", "GRAPE", "BRICK", "PLANE", "CHAIR", "TABLE", "WATER", "MONEY",
-  "HOUSE", "LIGHT", "SMILE", "HEART", "BREAD", "CANDY", "CLOCK", "EARTH",
-  "FRUIT", "GREEN", "HAPPY", "JUICE", "KNIFE", "LAUGH", "MUSIC", "NURSE",
-  "OCEAN", "PIZZA", "QUEEN", "RIVER", "SUGAR", "TIGER", "UNITY", "VALUE",
-  "WHEEL", "YEAST", "ZEBRA"
+  "APPLE","GRAPE","BRICK","PLANE","CHAIR","TABLE","WATER","MONEY",
+  "HOUSE","LIGHT","SMILE","HEART","BREAD","CANDY","CLOCK","EARTH",
+  "FRUIT","GREEN","HAPPY","JUICE","KNIFE","LAUGH","MUSIC","NURSE",
+  "OCEAN","PIZZA","QUEEN","RIVER","SUGAR","TIGER","UNITY","VALUE",
+  "WHEEL","YEAST","ZEBRA"
 ];
 
 // =====================
@@ -56,7 +56,7 @@ function startGame() {
   message.textContent = "";
 
   clearGrid();
-  console.log("SECRET:", secretWord);
+  console.log("SECRET:", secretWord); // remove later
 }
 
 function submitGuess() {
@@ -64,29 +64,14 @@ function submitGuess() {
 
   const guess = input.value.trim().toUpperCase();
 
-  // 1. Length check
+  // Only rule: exactly 5 letters
   if (guess.length !== WORD_LENGTH) {
     showMessage("Enter exactly 5 letters");
     return;
   }
 
-  // 2. At least one letter must be in secret word
-  let hasCommonLetter = false;
-  for (const ch of guess) {
-    if (secretWord.includes(ch)) {
-      hasCommonLetter = true;
-      break;
-    }
-  }
-  if (!hasCommonLetter) {
-    showMessage("Guess must share a letter with the secret word!");
-    return;
-  }
-
-  // 3. Render guess
   renderGuess(guess);
 
-  // 4. Win check
   if (guess === secretWord) {
     endGame(true);
     return;
@@ -94,19 +79,17 @@ function submitGuess() {
 
   currentRow++;
 
-  // 5. Optional hint
+  // Hint when 2 rows left
   if (currentRow === MAX_ROWS - 2 && !hintGiven) {
     giveHint();
   }
 
-  // 6. Lose check
   if (currentRow === MAX_ROWS) {
     endGame(false);
   }
 
   input.value = "";
 }
-
 
 // =====================
 // WORDLE LOGIC
@@ -119,7 +102,7 @@ function renderGuess(guess) {
     letterCount[ch] = (letterCount[ch] || 0) + 1;
   }
 
-  // First pass – greens
+  // Pass 1 — GREEN
   for (let i = 0; i < WORD_LENGTH; i++) {
     const letter = guess[i];
     cells[i].textContent = letter;
@@ -130,7 +113,7 @@ function renderGuess(guess) {
     }
   }
 
-  // Second pass – yellows / grays
+  // Pass 2 — YELLOW / GRAY
   for (let i = 0; i < WORD_LENGTH; i++) {
     if (cells[i].classList.contains("correct")) continue;
 
@@ -146,10 +129,11 @@ function renderGuess(guess) {
 }
 
 // =====================
-// HINT SYSTEM (optional)
+// HINT SYSTEM
 // =====================
 function giveHint() {
   hintGiven = true;
+
   const revealed = new Set();
 
   for (let r = 0; r < currentRow; r++) {
@@ -168,8 +152,7 @@ function giveHint() {
   if (options.length === 0) return;
 
   const index = options[Math.floor(Math.random() * options.length)];
-  const letter = secretWord[index];
-  message.textContent = `Hint: Letter ${index + 1} is "${letter}"`;
+  message.textContent = `Hint: Letter ${index + 1} is "${secretWord[index]}"`;
 }
 
 // =====================
