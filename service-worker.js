@@ -1,14 +1,16 @@
-const CACHE_NAME = "wordle-cache-v3"; // CHANGE VERSION EVERY UPDATE
-const ASSETS = [
+const CACHE_NAME = "wordle-v2";
+
+const FILES_TO_CACHE = [
   "./",
   "./index.html",
   "./style.css",
-  "./script.js"
+  "./script.js",
+  "./manifest.json"
 ];
 
 self.addEventListener("install", event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(FILES_TO_CACHE))
   );
   self.skipWaiting();
 });
@@ -26,8 +28,6 @@ self.addEventListener("activate", event => {
 
 self.addEventListener("fetch", event => {
   event.respondWith(
-    caches.match(event.request).then(
-      response => response || fetch(event.request)
-    )
+    fetch(event.request).catch(() => caches.match(event.request))
   );
 });
