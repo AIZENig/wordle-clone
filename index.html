@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Wordle Clone</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main id="game">
+
+        <h1>Wordle</h1>
+
+        <!-- Message Area -->
+        <div id="message" aria-live="polite"></div>
+
+        <!-- Game Grid -->
+        <div id="grid">
+            <!-- 6 rows × 5 columns -->
+            <div class="row">
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+            <div class="row">
+                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div id="input-area">
+            <input
+                type="text"
+                id="guessInput"
+                maxlength="5"
+                autocomplete="off"
+                placeholder="Enter 5-letter word"
+            >
+            <button id="submitBtn">Submit</button>
+        </div>
+
+        <!-- Controls -->
+        <button id="restartBtn">Restart</button>
+
+        <!-- On-screen Keyboard -->
+        <div id="keyboard"></div>
+
+    </main>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+
+</body>
+</html>

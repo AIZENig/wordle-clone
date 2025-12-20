@@ -1,0 +1,8 @@
+{
+  "name": "Wordle Clone",
+  "short_name": "Wordle",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#121213",
+  "theme_color": "#121213"
+}

@@ -1,0 +1,178 @@
+/* =====================
+   CSS VARIABLES
+===================== */
+:root {
+    --bg-color: #121213;
+    --text-color: #ffffff;
+    --border-color: #3a3a3c;
+
+    --correct: #538d4e;
+    --present: #b59f3b;
+    --absent: #3a3a3c;
+
+    --key-bg: #818384;
+}
+
+/* =====================
+   GLOBAL RESET
+===================== */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: Arial, Helvetica, sans-serif;
+
+    display: flex;
+    justify-content: center;
+}
+
+#game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 420px;
+}
+
+/* =====================
+   TITLE & MESSAGE
+===================== */
+h1 {
+    margin-bottom: 12px;
+}
+
+#message {
+    min-height: 24px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* =====================
+   GRID
+===================== */
+#grid {
+    display: grid;
+    grid-template-rows: repeat(6, 1fr);
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.cell {
+    width: min(56px, 14vw);
+    height: min(56px, 14vw);
+
+    border: 2px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Cell states */
+.cell.correct {
+    background-color: var(--correct);
+    border-color: var(--correct);
+}
+
+.cell.present {
+    background-color: var(--present);
+    border-color: var(--present);
+}
+
+.cell.absent {
+    background-color: var(--absent);
+    border-color: var(--absent);
+}
+
+/* =====================
+   INPUT AREA
+===================== */
+#input-area {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+#guessInput {
+    padding: 8px;
+    font-size: 16px;
+    width: 160px;
+    text-transform: uppercase;
+}
+
+/* =====================
+   BUTTONS
+===================== */
+button {
+    padding: 8px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#restartBtn {
+    margin-bottom: 16px;
+}
+
+/* =====================
+   KEYBOARD
+===================== */
+#keyboard {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    width: 100%;
+    max-width: 420px;
+}
+
+.key {
+    padding: 10px 0;
+    background: var(--key-bg);
+    color: white;
+    text-align: center;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 4px;
+}
+
+.key:hover {
+    opacity: 0.85;
+}
+
+.key.correct {
+    background-color: var(--correct);
+}
+
+.key.present {
+    background-color: var(--present);
+}
+
+.key.absent {
+    background-color: var(--absent);
+}
