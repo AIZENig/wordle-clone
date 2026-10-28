@@ -419,10 +419,8 @@ function showResult() {
   document.getElementById("resultAttempts").textContent = `${game.guesses.length}/6`;
   document.getElementById("resultStreak").textContent = stats.streak;
   document.getElementById("resultWins").textContent = `${stats.played ? Math.round(stats.wins / stats.played * 100) : 0}%`;
-  document.getElementById("countdownWrap").hidden = game.mode !== "daily";
-  document.getElementById("resultPrimaryBtn").textContent = game.mode === "daily" ? "Play a practice word" : "Next practice word";
+  document.getElementById("resultPrimaryBtn").textContent = "Play next word";
   openDialog("resultDialog");
-  updateCountdown();
 }
 
 function showMessage(text) {
@@ -529,17 +527,6 @@ function fallbackCopy(text, done) {
   area.remove();
 }
 
-function updateCountdown() {
-  if (game.mode !== "daily") return;
-  const now = new Date();
-  const tomorrow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
-  const total = Math.max(0, tomorrow - now);
-  const hours = Math.floor(total / 3600000);
-  const minutes = Math.floor(total % 3600000 / 60000);
-  const seconds = Math.floor(total % 60000 / 1000);
-  document.getElementById("countdown").textContent = [hours, minutes, seconds].map(value => String(value).padStart(2, "0")).join(":");
-}
-
 function launchConfetti() {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const container = document.getElementById("confetti");
@@ -624,7 +611,7 @@ function bindEvents() {
   };
   document.getElementById("welcomeDailyBtn").addEventListener("click", () => dismissWelcome("daily"));
   document.getElementById("welcomePracticeBtn").addEventListener("click", () => dismissWelcome("practice"));
-  document.getElementById("welcomeCloseBtn").addEventListener("click", () => dismissWelcome("daily"));
+  document.getElementById("welcomeCloseBtn").addEventListener("click", () => dismissWelcome("practice"));
 
   document.getElementById("resetStatsBtn").addEventListener("click", event => {
     const button = event.currentTarget;
@@ -641,7 +628,6 @@ function bindEvents() {
     setTimeout(() => { button.textContent = "Reset statistics"; }, 1600);
   });
 
-  setInterval(updateCountdown, 1000);
   if (location.protocol === "http:" || location.protocol === "https:") {
     window.addEventListener("load", () => navigator.serviceWorker?.register("./service-worker.js").catch(() => {}));
   }
@@ -650,7 +636,7 @@ function bindEvents() {
 buildBoard();
 buildKeyboard();
 bindEvents();
-activateMode("daily");
+activateMode("practice");
 syncSettings();
 if (!data.hasSeenWelcome) welcomeDialog.showModal();
 window.__WORDLE_READY__ = true;
