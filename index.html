@@ -1,67 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Wordle Clone</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Styles -->
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101614">
+  <meta name="description" content="A polished five-letter word game with daily puzzles, unlimited practice, statistics, and hard mode.">
+  <title>Wordle — A daily word puzzle</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
 
-    <main id="game">
-
-        <h1>Wordle</h1>
-
-        <!-- Message Area -->
-        <div id="message" aria-live="polite"></div>
-
-        <!-- Game Grid -->
-        <div id="grid">
-            <!-- 6 rows × 5 columns -->
-            <div class="row">
-                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            </div>
-            <div class="row">
-                <div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
-            </div>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand" aria-label="Wordle">
+        <span class="brand-mark" aria-hidden="true">W</span>
+        <div>
+          <h1>WORDLE</h1>
+          <span class="brand-tagline">FIND THE WORD</span>
         </div>
+      </div>
+      <nav class="header-actions" aria-label="Game options">
+        <button class="icon-button" id="helpBtn" aria-label="How to play" title="How to play">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.8 9a2.3 2.3 0 0 1 4.4 1c0 1.8-2.2 2-2.2 3.6"></path><path d="M12 17h.01"></path></svg>
+        </button>
+        <button class="icon-button" id="statsBtn" aria-label="Statistics" title="Statistics">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10"></path><path d="M12 20V4"></path><path d="M20 20v-7"></path></svg>
+        </button>
+        <button class="icon-button" id="settingsBtn" aria-label="Settings" title="Settings">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"></path></svg>
+        </button>
+        <button class="icon-button" id="pauseBtn" aria-label="Pause game" title="Pause">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5v14"></path><path d="M15 5v14"></path></svg>
+        </button>
+      </nav>
+    </header>
 
-        <!-- Input Area -->
-        <div id="input-area">
-            <input
-                type="text"
-                id="guessInput"
-                maxlength="5"
-                autocomplete="off"
-                placeholder="Enter 5-letter word"
-            >
-            <button id="submitBtn">Submit</button>
+    <main id="game" aria-label="Wordle game">
+      <section class="game-meta" aria-label="Current game">
+        <div class="mode-switch" role="group" aria-label="Game mode">
+          <button id="dailyModeBtn" class="mode-button active" aria-pressed="true">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M16 3v4M8 3v4M3 10h18"></path></svg>
+            Daily
+          </button>
+          <button id="practiceModeBtn" class="mode-button" aria-pressed="false">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.7"></path><path d="M20 4v6h-6"></path></svg>
+            Practice
+          </button>
         </div>
+        <div class="puzzle-meta">
+          <span id="puzzleLabel">PUZZLE #1</span>
+          <span class="meta-divider" aria-hidden="true"></span>
+          <span id="attemptLabel">6 TRIES LEFT</span>
+        </div>
+      </section>
 
-        <!-- Controls -->
-        <button id="restartBtn">Restart</button>
+      <section class="board-wrap" aria-label="Guess board">
+        <div id="message" class="toast" role="status" aria-live="polite"></div>
+        <div id="grid" class="grid" role="grid" aria-label="Six guesses of five letters"></div>
+      </section>
 
-        <!-- On-screen Keyboard -->
-        <div id="keyboard"></div>
+      <section id="keyboard" class="keyboard" aria-label="On-screen keyboard">
+        <div class="key-row" data-row="QWERTYUIOP"></div>
+        <div class="key-row" data-row="ASDFGHJKL"></div>
+        <div class="key-row" data-row="ZXCVBNM">
+          <button class="key key-wide" data-key="ENTER" aria-label="Submit guess">ENTER</button>
+        </div>
+      </section>
 
+      <div class="bottom-bar">
+        <span class="keyboard-hint">Use your keyboard or tap the keys</span>
+        <button id="soundBtn" class="sound-button" aria-label="Mute sound" title="Mute sound">
+          <svg class="sound-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg>
+          <svg class="sound-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4Z"></path><path d="m16 9 6 6M22 9l-6 6"></path></svg>
+        </button>
+      </div>
     </main>
+  </div>
 
-    <!-- Script -->
-    <script src="script.js"></script>
+  <dialog id="welcomeDialog" class="modal welcome-modal">
+    <div class="modal-content welcome-content">
+      <button class="modal-close" id="welcomeCloseBtn" aria-label="Close welcome">×</button>
+      <div class="hero-tiles" aria-hidden="true">
+        <span class="mini-tile correct">W</span><span class="mini-tile">O</span><span class="mini-tile present">R</span><span class="mini-tile">D</span><span class="mini-tile correct">S</span>
+      </div>
+      <span class="eyebrow">YOUR DAILY WORD RITUAL</span>
+      <h2>Five letters.<br>Six possibilities.</h2>
+      <p>Uncover the hidden word with color-coded clues. One puzzle each day, or practice as much as you like.</p>
+      <button id="welcomeDailyBtn" class="primary-button">Play today’s puzzle <span>→</span></button>
+      <button id="welcomePracticeBtn" class="text-button">Try unlimited practice</button>
+      <span class="welcome-note">No account. No ads. Just words.</span>
+    </div>
+  </dialog>
 
+  <dialog id="helpDialog" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" data-close="helpDialog" aria-label="Close instructions">×</button>
+      <span class="eyebrow">THE BASICS</span>
+      <h2>How to play</h2>
+      <p>Guess the hidden five-letter word in six tries. Each guess must be a valid word.</p>
+      <div class="example">
+        <div class="example-tiles"><span class="mini-tile correct">W</span><span class="mini-tile">O</span><span class="mini-tile">R</span><span class="mini-tile">D</span><span class="mini-tile">S</span></div>
+        <p><strong>W</strong> is in the word and in the correct spot.</p>
+      </div>
+      <div class="example">
+        <div class="example-tiles"><span class="mini-tile">P</span><span class="mini-tile present">I</span><span class="mini-tile">L</span><span class="mini-tile">O</span><span class="mini-tile">T</span></div>
+        <p><strong>I</strong> is in the word but in the wrong spot.</p>
+      </div>
+      <div class="example">
+        <div class="example-tiles"><span class="mini-tile">V</span><span class="mini-tile">A</span><span class="mini-tile absent">G</span><span class="mini-tile">U</span><span class="mini-tile">E</span></div>
+        <p><strong>G</strong> is not in the word in any spot.</p>
+      </div>
+      <div class="help-note"><strong>Hard mode</strong><span>Revealed clues must be used in every later guess.</span></div>
+      <button class="primary-button" data-close="helpDialog">Got it</button>
+    </div>
+  </dialog>
+
+  <dialog id="statsDialog" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" data-close="statsDialog" aria-label="Close statistics">×</button>
+      <span class="eyebrow">YOUR JOURNEY</span>
+      <h2>Statistics</h2>
+      <div class="stats-grid">
+        <div><strong id="statPlayed">0</strong><span>Played</span></div>
+        <div><strong id="statWinRate">0</strong><span>Win %</span></div>
+        <div><strong id="statStreak">0</strong><span>Streak</span></div>
+        <div><strong id="statMaxStreak">0</strong><span>Best</span></div>
+      </div>
+      <h3>Guess distribution</h3>
+      <div id="distribution" class="distribution"></div>
+      <p id="statsEmpty" class="empty-note">Finish a game to start your statistics.</p>
+    </div>
+  </dialog>
+
+  <dialog id="settingsDialog" class="modal">
+    <div class="modal-content">
+      <button class="modal-close" data-close="settingsDialog" aria-label="Close settings">×</button>
+      <span class="eyebrow">MAKE IT YOURS</span>
+      <h2>Settings</h2>
+      <div class="setting-row">
+        <div><strong>Hard mode</strong><span>Use all revealed clues</span></div>
+        <button id="hardModeToggle" class="toggle" role="switch" aria-checked="false" aria-label="Hard mode"><span></span></button>
+      </div>
+      <div class="setting-row">
+        <div><strong>High contrast</strong><span>Blue and orange clues</span></div>
+        <button id="contrastToggle" class="toggle" role="switch" aria-checked="false" aria-label="High contrast"><span></span></button>
+      </div>
+      <div class="setting-row">
+        <div><strong>Light theme</strong><span>A brighter game board</span></div>
+        <button id="themeToggle" class="toggle" role="switch" aria-checked="false" aria-label="Light theme"><span></span></button>
+      </div>
+      <div class="setting-row">
+        <div><strong>Sound effects</strong><span>Subtle synthesized audio</span></div>
+        <button id="soundToggle" class="toggle on" role="switch" aria-checked="true" aria-label="Sound effects"><span></span></button>
+      </div>
+      <button id="resetStatsBtn" class="danger-button">Reset statistics</button>
+      <p class="storage-note">Settings, game progress, and statistics are saved only in this browser.</p>
+    </div>
+  </dialog>
+
+  <dialog id="pauseDialog" class="modal pause-modal">
+    <div class="modal-content centered-content">
+      <div class="pause-symbol" aria-hidden="true"><span></span><span></span></div>
+      <span class="eyebrow">TAKE A BREATH</span>
+      <h2>Game paused</h2>
+      <p>Your progress is safe. Come back when you’re ready.</p>
+      <button id="resumeBtn" class="primary-button">Resume game</button>
+      <button id="pauseNewPracticeBtn" class="text-button">Start a practice word</button>
+    </div>
+  </dialog>
+
+  <dialog id="resultDialog" class="modal result-modal">
+    <div class="modal-content centered-content">
+      <button class="modal-close" data-close="resultDialog" aria-label="Close result">×</button>
+      <div id="resultIcon" class="result-icon" aria-hidden="true">✓</div>
+      <span id="resultEyebrow" class="eyebrow">BRILLIANT</span>
+      <h2 id="resultTitle">You found it!</h2>
+      <p id="resultText">You solved the puzzle.</p>
+      <div class="answer-card"><span>THE WORD WAS</span><strong id="resultWord">APPLE</strong></div>
+      <div class="result-stats">
+        <div><strong id="resultAttempts">4/6</strong><span>Attempts</span></div>
+        <div><strong id="resultStreak">1</strong><span>Streak</span></div>
+        <div><strong id="resultWins">100%</strong><span>Win rate</span></div>
+      </div>
+      <div id="countdownWrap" class="countdown-wrap"><span>Next daily word in</span><strong id="countdown">00:00:00</strong></div>
+      <button id="shareBtn" class="primary-button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"></path></svg>
+        Share result
+      </button>
+      <button id="resultPrimaryBtn" class="text-button">Play a practice word</button>
+    </div>
+  </dialog>
+
+  <div id="confetti" class="confetti" aria-hidden="true"></div>
+  <script src="script.js"></script>
 </body>
 </html>
